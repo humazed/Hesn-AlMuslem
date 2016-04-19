@@ -5,10 +5,13 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
+import lombok.Data;
+
 /**
  * User: huma
  * Date: 4/3/2016
  */
+@Data
 public class Category implements Parcelable {
     private String titleAr;
     private String titleEn;
@@ -25,28 +28,8 @@ public class Category implements Parcelable {
         mHadeths = in.createTypedArrayList(Hadeth.CREATOR);
     }
 
-    public String getTitleAr() {
-        return titleAr;
-    }
-
-    public void setTitleAr(String titleAr) {
-        this.titleAr = titleAr;
-    }
-
-    public String getTitleEn() {
-        return titleEn;
-    }
-
-    public void setTitleEn(String titleEn) {
-        this.titleEn = titleEn;
-    }
-
     public ArrayList<Hadeth> getHadeths() {
         return mHadeths;
-    }
-
-    public void setHadeths(ArrayList<Hadeth> hadeths) {
-        mHadeths = hadeths;
     }
 
     public static final Creator<Category> CREATOR = new Creator<Category>() {
@@ -72,12 +55,4 @@ public class Category implements Parcelable {
         dest.writeTypedList(mHadeths);
     }
 
-    @Override
-    public String toString() {
-        return "Category{" +
-                "titleAr='" + titleAr + '\'' +
-                ", titleEn='" + titleEn + '\'' +
-                ", mHadeths=" + mHadeths +
-                '}';
-    }
 }

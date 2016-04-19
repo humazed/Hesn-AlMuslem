@@ -26,6 +26,10 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:support-v4:23.3.0'
+
     compile 'com.readystatesoftware.sqliteasset:sqliteassethelper:2.0.1'
-    compile "org.projectlombok:lombok:1.16.8"
+
+    provided "org.projectlombok:lombok:1.16.8"
+    compile 'javax.annotation:jsr250-api:1.0'
+
 }

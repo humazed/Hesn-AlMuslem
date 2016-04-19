@@ -139,8 +139,8 @@ public class ViewPagerActivity extends AppCompatActivity {
                     mBodyTextView.setText(((Hadeth) getArguments().getParcelable(ARG_HADETH)).getBodyEn());
                     mInfoTextView.setText(((Hadeth) getArguments().getParcelable(ARG_HADETH)).getInfoEn());
                 } else {
-                    mBodyTextView.setText(((Hadeth) getArguments().getParcelable(ARG_HADETH)).getBodyAr());
-                    mInfoTextView.setText(((Hadeth) getArguments().getParcelable(ARG_HADETH)).getInfoAr());
+                    mBodyTextView.setText(((Hadeth) getArguments().getParcelable(ARG_HADETH)).getItem1());
+                    mInfoTextView.setText(((Hadeth) getArguments().getParcelable(ARG_HADETH)).getItem2());
                 }
             }
         }
