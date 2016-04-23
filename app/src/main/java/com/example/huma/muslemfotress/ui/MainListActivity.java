@@ -1,4 +1,4 @@
-package com.example.huma.muslemfotress;
+package com.example.huma.muslemfotress.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.example.huma.muslemfotress.R;
 import com.example.huma.muslemfotress.data.Category;
 import com.example.huma.muslemfotress.database.DbHelper;
 
@@ -33,7 +34,7 @@ public class MainListActivity extends AppCompatActivity
 
     private ArrayList<Category> mCategories;
 
-    public static boolean english = true;
+    public static boolean isEnglish = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class MainListActivity extends AppCompatActivity
 
     private void refresh(ArrayList<Category> categories) {
         ArrayList<String> titles = new ArrayList<>();
-        if (english) {
+        if (isEnglish) {
             for (Category category : categories)
                 titles.add(category.getTitleEn());
         } else {
@@ -120,7 +121,7 @@ public class MainListActivity extends AppCompatActivity
     }
 
     public static void changeLanguage() {
-        english = !english;
+        isEnglish = !isEnglish;
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

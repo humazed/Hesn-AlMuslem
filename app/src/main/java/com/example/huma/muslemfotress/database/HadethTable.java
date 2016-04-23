@@ -14,6 +14,6 @@ public interface HadethTable extends BaseColumns {
     String COL_FAV = "fav";
     String COL_CATEGORY_ID = "categoryID";
 
-    String [] projection = {_ID,COL_BODY_AR,COL_INFO_AR,COl_BODY_EN,COL_INFO_EN,COL_FAV,COL_CATEGORY_ID};
+    String[] PROJECTION = {_ID, COL_BODY_AR, COL_INFO_AR, COl_BODY_EN, COL_INFO_EN, COL_FAV, COL_CATEGORY_ID};
 
 }

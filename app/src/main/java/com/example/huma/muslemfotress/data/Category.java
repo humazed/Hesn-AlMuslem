@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -12,24 +13,22 @@ import lombok.Data;
  * Date: 4/3/2016
  */
 @Data
+//@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@AllArgsConstructor(suppressConstructorProperties = true)
 public class Category implements Parcelable {
+    private int id;
     private String titleAr;
     private String titleEn;
-    private ArrayList<Hadeth> mHadeths = new ArrayList<>();
+    private boolean fav;
+    private ArrayList<Hadeth> hadeths = new ArrayList<>();
 
-    public Category(String titleAr, String titleEn, ArrayList<Hadeth> hadeths) {
-        this.titleAr = titleAr;
-        this.titleEn = titleEn;
-        mHadeths = hadeths;
-    }
 
     protected Category(Parcel in) {
+        id = in.readInt();
         titleAr = in.readString();
-        mHadeths = in.createTypedArrayList(Hadeth.CREATOR);
-    }
-
-    public ArrayList<Hadeth> getHadeths() {
-        return mHadeths;
+        titleEn = in.readString();
+        fav = in.readByte() != 0;
+        hadeths = in.createTypedArrayList(Hadeth.CREATOR);
     }
 
     public static final Creator<Category> CREATOR = new Creator<Category>() {
@@ -51,8 +50,10 @@ public class Category implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(titleAr);
-        dest.writeTypedList(mHadeths);
+        dest.writeString(titleEn);
+        dest.writeByte((byte) (fav ? 1 : 0));
+        dest.writeTypedList(hadeths);
     }
-
 }

@@ -1,21 +1,27 @@
-package com.example.huma.muslemfotress;
+package com.example.huma.muslemfotress.ui;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.huma.muslemfotress.data.Hadeth;
+import com.example.huma.muslemfotress.R;
 import com.example.huma.muslemfotress.data.Category;
+import com.example.huma.muslemfotress.data.Hadeth;
+import com.example.huma.muslemfotress.database.DbHelper;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -23,13 +29,15 @@ import butterknife.ButterKnife;
 public class ViewPagerActivity extends AppCompatActivity {
     private static final String TAG = ViewPagerActivity.class.getSimpleName();
 
+    @Bind(R.id.fav_button) ImageView mFavButton;
+
     /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
+     * The {@link PagerAdapter} that will provide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     * {@link FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -39,21 +47,24 @@ public class ViewPagerActivity extends AppCompatActivity {
     private ViewPager mViewPager;
 
     Category mCategory;
+    private DbHelper mDbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_pager);
+        ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
+        mDbHelper = new DbHelper(this);
 
         mCategory = getIntent().getParcelableExtra(MainListActivity.CATEGORY);
-
-        if (MainListActivity.english)
+        Log.d(TAG, "onCreate " + "Category: " + mCategory);
+        if (MainListActivity.isEnglish)
             getSupportActionBar().setTitle(mCategory.getTitleEn());
         else getSupportActionBar().setTitle(mCategory.getTitleAr());
 
@@ -65,6 +76,20 @@ public class ViewPagerActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         if (mViewPager != null) mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        mFavButton.setSelected(mDbHelper.isFav(mCategory.getId()));
+
+        mFavButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!mFavButton.isSelected()) {
+                    mFavButton.setSelected(true);
+                    mDbHelper.addFav(mCategory.getId());
+                } else {
+                    mFavButton.setSelected(false);
+                    mDbHelper.removeFav(mCategory.getId());
+                }
+            }
+        });
 
     }
 
@@ -72,7 +97,7 @@ public class ViewPagerActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_detail, menu);
+        getMenuInflater().inflate(R.menu.menu_view_pager, menu);
         return true;
     }
 
@@ -87,13 +112,11 @@ public class ViewPagerActivity extends AppCompatActivity {
         switch (id) {
             case R.id.action_settings:
                 return true;
-            case R.id.action_change_language:
-                MainListActivity.changeLanguage();
-                break;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * A placeholder fragment containing a simple view.
@@ -135,7 +158,7 @@ public class ViewPagerActivity extends AppCompatActivity {
 
         private void refresh() {
             if (getArguments().getParcelable(ARG_HADETH) != null) {
-                if (MainListActivity.english) {
+                if (MainListActivity.isEnglish) {
                     mBodyTextView.setText(((Hadeth) getArguments().getParcelable(ARG_HADETH)).getBodyEn());
                     mInfoTextView.setText(((Hadeth) getArguments().getParcelable(ARG_HADETH)).getInfoEn());
                 } else {
@@ -177,14 +200,6 @@ public class ViewPagerActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "SECTION 1";
-                case 1:
-                    return "SECTION 2";
-                case 2:
-                    return "SECTION 3";
-            }
             return null;
         }
     }
